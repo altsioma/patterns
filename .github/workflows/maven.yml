@@ -1,9 +1,8 @@
-name: Java CI with Maven
+name: Java CI with Unit Tests
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened]
   workflow_dispatch:
 
 jobs:
@@ -19,10 +18,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '23'
-          cache: 'maven'
 
-      - name: Build with Maven
-        run: mvn clean install
-
-      - name: Unit Test
+      - name: Unit Tests
         run: mvn test
