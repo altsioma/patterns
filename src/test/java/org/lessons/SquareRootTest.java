@@ -2,6 +2,8 @@ package org.lessons;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +29,7 @@ public class SquareRootTest {
     @Test()
     @DisplayName("есть один корень кратности 2 (x1=x2=-1)")
     public void testMultiplicityTwo() {
-        double EPSILON = 1e-12;
+        double EPSILON = 1e-11;
         double[] roots = SquareRoot.solve(1, 2, 1 + EPSILON);
         double[] expected = new double[]{-1, -1};
 
@@ -43,24 +45,13 @@ public class SquareRootTest {
         assertEquals("Коэффициент 'a' не может быть равен нулю для квадратного уравнения.", exception.getMessage());
     }
 
-    @Test()
-    @DisplayName("проверка на NaN в коэффициентах")
-    public void testNaNArguments() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> SquareRoot.solve(Double.NaN, Double.NaN, Double.NaN));
-        assertEquals("Коэффициенты не могут быть NaN.", exception.getMessage());
-    }
-
-    @Test()
-    @DisplayName("проверка на POSITIVE_INFINITY в коэффициентах")
-    public void testInfiniteArguments() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> SquareRoot.solve(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
-        assertEquals("Коэффициенты не могут быть бесконечными.", exception.getMessage());
-    }
-
-    @Test()
-    @DisplayName("проверка на NEGATIVE_INFINITY в коэффициентах")
-    public void testNegativeInfiniteArguments() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> SquareRoot.solve(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
-        assertEquals("Коэффициенты не могут быть бесконечными.", exception.getMessage());
+    @ParameterizedTest
+    @ArgumentsSource(CustomArgumentsProvider.class)
+    @DisplayName("проверка на валидность коэффициентов")
+    public void testNaNArguments(double a, double b, double c) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> SquareRoot.solve(a, b, c));
+        assertEquals("Коэффициенты заданы неверно.", exception.getMessage());
     }
 }
+
+
