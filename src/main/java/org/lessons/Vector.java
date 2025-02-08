@@ -1,20 +1,36 @@
 package org.lessons;
 
+import java.util.Arrays;
+
 public class Vector {
-    int[] _coordinates;
+    private final int[] coords;
 
-    public Vector(int[] coordinates) {
-        _coordinates = coordinates;
+    public Vector(int... coords) {
+        this.coords = Arrays.copyOf(coords, coords.length);
     }
 
-    static Vector plus(Vector v1, Vector v2) {
-        ofr
-        return  new Vector()
+    public static Vector plus(Vector vector1, Vector vector2) {
+        if (vector1.coords.length != vector2.coords.length) {
+            throw new IllegalArgumentException("Массивы должны быть одинаковой длины");
+        }
+
+        int[] result = new int[vector1.coords.length];
+
+        for (int i = 0; i < vector1.coords.length; i++) {
+            result[i] = vector1.coords[i] + vector2.coords[i];
+        }
+
+        return new Vector(result);
     }
 
-    int[] getCoordinates() {
-        return new int[]{this.x, this.y};
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Vector vector = (Vector) obj;
+        return Arrays.equals(coords, vector.coords);
     }
 }
+
 
 
